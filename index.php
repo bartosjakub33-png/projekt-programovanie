@@ -1,5 +1,5 @@
 <?php
-include "db.php";
+include "databaza.php";
 
 $query = "
 SELECT tasks.id, tasks.title, users.username
