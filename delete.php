@@ -1,5 +1,5 @@
 <?php
-include "db.php";
+include "databaza.php";
 
 $id = $_GET["id"];
 
