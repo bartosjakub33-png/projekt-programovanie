@@ -1,5 +1,5 @@
 <?php
-include "db.php";
+include "databaza.php";
 
 $users = mysqli_query($conn, "SELECT * FROM users");
 
