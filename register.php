@@ -1,24 +1,29 @@
 <?php
 include "databaza.php";
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+$conn = mysqli_connect($host, $user, $password, $database);
 
-    $username = trim($_POST["username"]);
-    $password = trim($_POST["password"]);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
-    if(!empty($username) && !empty($password)){
+if(isset($_POST["register"])){
 
-        $hashed = password_hash($password, PASSWORD_DEFAULT);
+    $username = $_POST["usernname"];
+    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-        $sql = "
-        INSERT INTO users(username, password)
-        VALUES('$username', '$hashed')
-        ";
+    $sql = "INSERT INTO users (user, password)
+            VALUES ('$user', '$password')";
 
-        mysqli_query($conn, $sql);
+    if (mysqli_query($conn, $sql)) {
 
         header("Location: login.php");
         exit();
+
+    } else {
+
+        echo "Error: " . mysqli_error($conn);
+
     }
 }
 ?>
@@ -51,11 +56,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 <br>
 
-<button type="submit">
+<button type="submit" name="register">
 Registrovať
 </button>
 
 </form>
+
+<br>
+
+<a href="login.php">Login</a>
 
 </div>
 
