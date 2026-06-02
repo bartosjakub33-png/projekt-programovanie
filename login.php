@@ -3,31 +3,42 @@ session_start();
 
 include "databaza.php";
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+$conn = mysqli_connect($host, $user, $password, $database);
+
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+if(isset($_POST["submit"])) {
 
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    $sql = "
-    SELECT * FROM users
-    WHERE username='$username'
-    ";
+    $sql = "SELECT * FROM users WHERE username='$username'";
 
     $result = mysqli_query($conn, $sql);
 
-    $user = mysqli_fetch_assoc($result);
+    if(mysqli_num_rows($result) == 1) {
 
-    if($user && password_verify($password, $user["password"])){
+        $row = mysqli_fetch_assoc($result);
 
-        $_SESSION["user_id"] = $user["id"];
-        $_SESSION["username"] = $user["username"];
+        if(password_verify($password, $row["pass"])) {
 
-        header("Location: index.php");
-        exit();
+            $_SESSION["user_id"] = $row["id"];
+
+            header("Location: index.php");
+            exit();
+
+        } else {
+
+            echo "Zlé heslo!";
+
+        }
 
     } else {
 
-        echo "Nesprávne meno alebo heslo";
+        echo "Používateľ neexistuje!";
+
     }
 }
 ?>
@@ -60,7 +71,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 <br>
 
-<button type="submit">
+<button type="submit" name="submit">
 Prihlásiť
 </button>
 
