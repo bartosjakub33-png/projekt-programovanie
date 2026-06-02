@@ -12,19 +12,11 @@ include "databaza.php";
 $user_id = $_SESSION["user_id"];
 
 $query = "
-SELECT *
-FROM tasks
-WHERE user_id = $user_id
-";
-
-$result = mysqli_query($conn, $query);
-
-include "databaza.php";
-
-$query = "
 SELECT tasks.id, tasks.title, users.username
 FROM tasks
-LEFT JOIN users ON tasks.user_id = users.id";
+LEFT JOIN users ON tasks.user_id = users.id
+WHERE tasks.user_id = $user_id
+";
 
 $result = mysqli_query($conn, $query);
 ?>
@@ -32,7 +24,7 @@ $result = mysqli_query($conn, $query);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>todo app</title>
+    <title>TODO APP</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
